@@ -4,10 +4,10 @@ import Button from '../shared/Button'
 
 const Home = () => {
 
-  const handleMuliplayer = () => {
-    // set the game type etc
-    // push history to next page
-  }
+  // const handleMuliplayer = () => {
+  //   // set the game type etc
+  //   // push history to next page
+  // }
 
   return (
     <>
