@@ -1,4 +1,4 @@
-import { getScore } from '../../utils/words'
+import { BoggleSolver } from '../../utils/words'
 
 export const getTimer = ({ game: { timer } }) => timer
 
@@ -23,7 +23,7 @@ export const getWords = ({ game: { words } }) => {
   return {
     words,
     score: words.reduce((sum, word) => {
-      return sum + getScore(word)
+      return sum + BoggleSolver.getPoints(word)
     }, 0)
   }
 }

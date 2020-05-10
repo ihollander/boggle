@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
@@ -10,7 +10,7 @@ import Button from '../shared/Button'
 import * as gameSelectors from '../../store/game/selectors'
 import * as gameActions from '../../store/game/actions'
 import { gameStates } from '../../constants'
-import { isValidWord, solve } from '../../utils/words'
+import { BoggleSolver } from '../../utils/words'
 
 const BoardContainer = styled.section`
   padding: 2rem;
@@ -42,14 +42,24 @@ const Game = () => {
   const { words, score } = useSelector(gameSelectors.getWords)
   const gameState = useSelector(gameSelectors.getGameState)
 
+  const [showSolution, setShowSolution] = useState(false)
+  const [solvedWords, setSolvedWords] = useState([])
   const [tileState, setTileState] = useState(0)
   const [counterState, setCounterState] = useState(-1)
 
   const selectingRef = useRef(false)
   const lastElementTouchRef = useRef()
+  const solverRef = useRef(null)
+
+  useEffect(() => {
+    if (dice.length && gameState === gameStates.PLAYING && !solverRef.current) {
+      solverRef.current = new BoggleSolver(dice.map(die => die.face))
+      setSolvedWords(solverRef.current.solve())
+    }
+  }, [dice, gameState])
 
   const submitWord = () => {
-    if (isValidWord(selectedWord) && !words.includes(selectedWord)) {
+    if (solverRef.current.isValidWord(selectedWord) && !words.includes(selectedWord)) {
       setTileState(1)
       setTimeout(() => {
         setTileState(0)
@@ -148,15 +158,10 @@ const Game = () => {
             handleSelect={handleSelect}
           />
         })}
-        {gameState === gameStates.ENDED && (
-          <>
-            {solve(dice.map(die => die.face)).join("\n")}
-            <Blurrer />
-          </>
-        )}
+        {gameState === gameStates.ENDED && <Blurrer />}
       </MainBoard>
-      <ActionBar score={score} />
-      <WordList words={words} selectedWord={selectedWord} tileState={tileState} />
+      <ActionBar ended={gameState === gameStates.ENDED} score={score} showSolution={showSolution} setShowSolution={setShowSolution} />
+      <WordList words={showSolution ? solvedWords : words} selectedWord={selectedWord} tileState={tileState} />
     </BoardContainer>
   )
 }

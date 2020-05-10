@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { getScore } from '../../utils/words'
+import { BoggleSolver } from '../../utils/words'
 
 const ListContainer = styled.ul`
   list-style: none;
@@ -36,12 +36,12 @@ const WordList = ({ words, selectedWord, tileState }) => {
     <ListContainer>
       <SelectedWord tileState={tileState}>
         <span>{selectedWord}</span>
-        <span className="score">{selectedWord.length ? `+${getScore(selectedWord)}` : null}</span>
+        <span className="score">{selectedWord.length ? `+${BoggleSolver.getPoints(selectedWord)}` : null}</span>
       </SelectedWord>
       {words.map(word =>
         <Word key={word}>
           <span>{word}</span>
-          <span className="score">+{getScore(word)}</span>
+          <span className="score">+{BoggleSolver.getPoints(word)}</span>
         </Word>
       )}
     </ListContainer>

@@ -9,10 +9,14 @@ const ActionBarContainer = styled.div`
   margin: 0.5rem 0;
 `
 
-const ActionBar = ({ score }) => {
+const ActionBar = ({ score, ended, showSolution, setShowSolution }) => {
   return (
     <ActionBarContainer>
       <h2>SCORE: {score}</h2>
+      {ended && (
+        <h2 onClick={() => setShowSolution(!showSolution)} style={{ textDecoration: `${showSolution ? "none" : "underline"}` }}>
+          ANSWERS
+        </h2>)}
       <Timer />
     </ActionBarContainer>
   )
