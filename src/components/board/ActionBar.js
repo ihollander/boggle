@@ -16,7 +16,8 @@ const ActionBar = ({ score, ended, showSolution, setShowSolution }) => {
       {ended && (
         <h2 onClick={() => setShowSolution(!showSolution)} style={{ textDecoration: `${showSolution ? "none" : "underline"}` }}>
           ANSWERS
-        </h2>)}
+        </h2>
+      )}
       <Timer />
     </ActionBarContainer>
   )

@@ -161,7 +161,7 @@ const Game = () => {
         {gameState === gameStates.ENDED && <Blurrer />}
       </MainBoard>
       <ActionBar ended={gameState === gameStates.ENDED} score={score} showSolution={showSolution} setShowSolution={setShowSolution} />
-      <WordList words={showSolution ? solvedWords : words} selectedWord={selectedWord} tileState={tileState} />
+      <WordList showSolution={showSolution} words={words} solvedWords={solvedWords} selectedWord={selectedWord} tileState={tileState} />
     </BoardContainer>
   )
 }

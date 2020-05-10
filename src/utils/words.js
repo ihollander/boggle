@@ -99,11 +99,10 @@ export class BoggleSolver {
   isValidWord(word) {
     let cur = this.trie
     for (let c of word) {
-      while (cur[c]) {
-        if (cur[c] === 0 || cur[c]["$"] === 0) return true
-        cur = cur[c]
-      }
+      if (cur[c] == null) return false
+      cur = cur[c]
     }
+    return cur === 0 || cur["$"] === 0
   }
 
   getNeighbors(index) {

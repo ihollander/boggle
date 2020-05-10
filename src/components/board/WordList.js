@@ -31,7 +31,20 @@ const colorMap = {
   2: "red"
 }
 
-const WordList = ({ words, selectedWord, tileState }) => {
+const WordList = ({ showSolution, words, solvedWords, selectedWord, tileState }) => {
+  if (showSolution) {
+    return (
+      <ListContainer>
+        {solvedWords.map(word =>
+          <Word key={word}>
+            <span style={{ color: `${words.includes(word) ? "green" : "black"}` }}>{word}</span>
+            <span className="score">+{BoggleSolver.getPoints(word)}</span>
+          </Word>
+        )}
+      </ListContainer>
+    )
+  }
+
   return (
     <ListContainer>
       <SelectedWord tileState={tileState}>

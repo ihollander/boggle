@@ -15,28 +15,18 @@ const isValidSelection = ({ selected }, index) => {
 
   const lastSelection = selected[selected.length - 1]
 
-  let validIndices
-  if (lastSelection % 4 === 0) {
-    validIndices = [
-      lastSelection - 4, lastSelection - 3,
-      lastSelection + 1,
-      lastSelection + 4, lastSelection + 5
-    ]
-  } else if (lastSelection % 4 === 3) {
-    validIndices = [
-      lastSelection - 4, lastSelection - 3,
-      lastSelection - 1,
-      lastSelection + 3, lastSelection + 4
-    ]
-  } else {
-    validIndices = [
-      lastSelection - 5, lastSelection - 4, lastSelection - 3,
-      lastSelection - 1, lastSelection + 1,
-      lastSelection + 3, lastSelection + 4, lastSelection + 5
-    ]
+  const x = lastSelection % 4
+  const y = Math.floor(lastSelection / 4)
+  let neighbors = []
+  for (let nx = Math.max(0, x - 1); nx < Math.min(x + 2, 4); nx++) {
+    for (let ny = Math.max(0, y - 1); ny < Math.min(y + 2, 4); ny++) {
+      if (!(nx === x && ny === y)) {
+        neighbors.push((ny * 4) + nx)
+      }
+    }
   }
 
-  return validIndices.includes(index)
+  return neighbors.includes(index)
 }
 
 const reducerActions = {
