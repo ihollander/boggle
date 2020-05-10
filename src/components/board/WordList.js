@@ -5,7 +5,7 @@ import { getScore } from '../../utils/words'
 const ListContainer = styled.ul`
   list-style: none;
   height: 35vh;
-  border: 0.2rem solid black;
+  border: 4px solid black;
   overflow-y: scroll;
   padding: 0.5rem;
 `

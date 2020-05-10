@@ -15,11 +15,26 @@ const isValidSelection = ({ selected }, index) => {
 
   const lastSelection = selected[selected.length - 1]
 
-  const validIndices = [
-    lastSelection - 5, lastSelection - 4, lastSelection - 3,
-    lastSelection - 1, lastSelection + 1,
-    lastSelection + 3, lastSelection + 4, lastSelection + 5
-  ]
+  let validIndices
+  if (lastSelection % 4 === 0) {
+    validIndices = [
+      lastSelection - 4, lastSelection - 3,
+      lastSelection + 1,
+      lastSelection + 4, lastSelection + 5
+    ]
+  } else if (lastSelection % 4 === 3) {
+    validIndices = [
+      lastSelection - 4, lastSelection - 3,
+      lastSelection - 1,
+      lastSelection + 3, lastSelection + 4
+    ]
+  } else {
+    validIndices = [
+      lastSelection - 5, lastSelection - 4, lastSelection - 3,
+      lastSelection - 1, lastSelection + 1,
+      lastSelection + 3, lastSelection + 4, lastSelection + 5
+    ]
+  }
 
   return validIndices.includes(index)
 }

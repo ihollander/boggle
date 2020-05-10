@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 
 const DieHolder = styled.div`
   width: 25%;
-  border: 0.1rem solid black;
+  border: 2px solid black;
   display: flex;
   justify-content: center;
   align-items: center;

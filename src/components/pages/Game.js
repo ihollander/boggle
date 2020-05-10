@@ -10,7 +10,7 @@ import Button from '../shared/Button'
 import * as gameSelectors from '../../store/game/selectors'
 import * as gameActions from '../../store/game/actions'
 import { gameStates } from '../../constants'
-import { isValidWord } from '../../utils/words'
+import { isValidWord, solve } from '../../utils/words'
 
 const BoardContainer = styled.section`
   padding: 2rem;
@@ -21,7 +21,7 @@ const BoardContainer = styled.section`
 const MainBoard = styled.div`
   display: flex;
   flex-wrap: wrap;
-  border: 0.1rem solid black;
+  border: 2px solid black;
   overscroll-behavior-y: none;
   touch-action: none;
   position: relative;
@@ -148,7 +148,12 @@ const Game = () => {
             handleSelect={handleSelect}
           />
         })}
-        {gameState === gameStates.ENDED && <Blurrer />}
+        {gameState === gameStates.ENDED && (
+          <>
+            {solve(dice.map(die => die.face)).join("\n")}
+            <Blurrer />
+          </>
+        )}
       </MainBoard>
       <ActionBar score={score} />
       <WordList words={words} selectedWord={selectedWord} tileState={tileState} />

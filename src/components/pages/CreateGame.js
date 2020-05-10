@@ -40,16 +40,6 @@ const FormField = styled.div`
     font-weight: bold;
     padding: 0.25rem 1rem;
   }
-
-  &.seconds::after {
-    content: "seconds";
-    position: absolute;
-    right: 0.5rem;
-    top: 0.6rem;
-    color: #ccc;
-    font-size: 1.5rem;
-    text-align: right;
-  }
 `
 
 const CreateGame = () => {
@@ -75,8 +65,8 @@ const CreateGame = () => {
           <option value="5">5x5</option>
         </select>
       </FormField>
-      <FormField className="seconds">
-        <label>Time Limit:</label>
+      <FormField>
+        <label>Time (s):</label>
         <input type="number" step={1} min={0} value={timer} onChange={e => setTimer(e.target.value)} />
       </FormField>
       <Button size="medium">CREATE</Button>
