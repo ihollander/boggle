@@ -38,6 +38,11 @@ function App() {
     fetch(process.env.REACT_APP_HTTP_ROOT)
   }, [])
 
+  // viewport scale
+  useEffect(() => {
+    document.querySelector("meta[name=viewport]").setAttribute("content", `height=${window.innerHeight}px, width=${window.innerWidth}px, initial-scale=1.0`);
+  }, [])
+
   useEffect(() => {
     const username = localStorage.getItem("username")
     if (username) {
