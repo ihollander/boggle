@@ -24,9 +24,6 @@ const NavBar = () => {
       <Link to="/">
         Home
       </Link>
-      <Link to="/join">
-        Lobby
-      </Link>
     </Nav>
   )
 }

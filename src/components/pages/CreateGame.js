@@ -14,9 +14,6 @@ const CreateGame = () => {
   const dispatch = useDispatch()
 
   const username = useSelector(userSelectors.getUser)
-  if (!username) {
-    history.push("/")
-  }
 
   const [gridSize, setGridSize] = useState("4")
   const [timer, setTimer] = useState("120")

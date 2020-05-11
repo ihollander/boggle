@@ -41,6 +41,11 @@ const Join = () => {
   return (
 
     <GameList>
+      {games.length === 0 && (
+        <Link to="/create">
+          No Active Games - Make One
+        </Link>
+      )}
       {games.map(game => (
         <Game key={game.name}>
           <Link to={`/games/${game.name}`}>
