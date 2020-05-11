@@ -20,6 +20,7 @@ const useActionCable = (channel, { received, initialized, connected, disconnecte
         subscription.unsubscribe()
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cable, params])
 
   return { cable }
