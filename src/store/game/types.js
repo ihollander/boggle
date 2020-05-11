@@ -1,8 +1,9 @@
 const prefix = "GAME"
 
-export const CREATE_GAME = `${prefix}_CREATE_GAME`
-export const START_GAME = `${prefix}_START_GAME`
-export const END_GAME = `${prefix}_END_GAME`
+export const SET_TYPE = `${prefix}_SET_TYPE`
+export const CREATE = `${prefix}_CREATE`
+export const START = `${prefix}_START`
+export const END = `${prefix}_END`
 export const TOGGLE_SELECTED = `${prefix}_TOGGLE_SELECTED`
 export const ADD_WORD = `${prefix}_ADD_WORD`
 export const CLEAR_SELECTED = `${prefix}_CLEAR_SELECTED`

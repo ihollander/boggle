@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 
 const sizes = {
@@ -9,30 +8,23 @@ const sizes = {
 
 const Button = styled.button`
   font-size: ${props => props.size ? sizes[props.size] : "3rem"};
-  border: 4px solid black;
-  background-color: white;
-  padding: 1rem;
+  color: var(--foreground);
+  border: 4px solid var(--foreground);
+  background-color: var(--background);
+  padding: 1rem 2rem;
   margin: 2rem;
-
-  div {
-    background-color: #ddd;
-    padding: 1rem 2rem;
-    border-radius: 1rem;
-    transition: background-color 0.1s;
-  }
+  box-shadow: 14px 14px var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
 
   &:focus {
     outline: none;
+    box-shadow: 4px 4px rgba(0, 0, 255, 0.2);
   }
 
-  &:focus div,
-  &:active div {
-    background-color: cyan;
+  &:active {
+    box-shadow: 0px 0px rgba(0, 0, 255, 0.2);
+    transform: translate(4px, 4px);
   }
 `
 
-export default ({ size, children, ...props }) => (
-  <Button size={size} {...props}>
-    <div>{children}</div>
-  </Button>
-)
+export default Button

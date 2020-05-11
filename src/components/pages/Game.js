@@ -1,16 +1,18 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import Dice from '../board/Dice'
 import WordList from '../board/WordList'
 import ActionBar from '../board/ActionBar'
-import Button from '../shared/Button'
 
 import * as gameSelectors from '../../store/game/selectors'
 import * as gameActions from '../../store/game/actions'
 import { gameStates } from '../../constants'
 import { BoggleSolver } from '../../utils/words'
+import Countdown from '../board/Countdown'
+import useActionCable from '../../actioncable/useActionCable'
 
 const BoardContainer = styled.section`
   padding: 2rem;
@@ -21,7 +23,7 @@ const BoardContainer = styled.section`
 const MainBoard = styled.div`
   display: flex;
   flex-wrap: wrap;
-  border: 2px solid black;
+  border: 2px solid var(--foreground);
   overscroll-behavior-y: none;
   touch-action: none;
   position: relative;
@@ -37,44 +39,65 @@ const Blurrer = styled.div`
 `
 
 const Game = () => {
+  const history = useHistory()
   const dispatch = useDispatch()
   const { dice, selectedWord } = useSelector(gameSelectors.getBoard)
   const { words, score } = useSelector(gameSelectors.getWords)
   const gameState = useSelector(gameSelectors.getGameState)
 
+  const gameId = useSelector(gameSelectors.getGameId)
+  if (!gameId) history.push("/")
+
   const [showSolution, setShowSolution] = useState(false)
   const [solvedWords, setSolvedWords] = useState([])
-  const [tileState, setTileState] = useState(0)
-  const [counterState, setCounterState] = useState(-1)
+  const [validatingState, setValidatingState] = useState(0)
 
-  const selectingRef = useRef(false)
-  const lastElementTouchRef = useRef()
   const solverRef = useRef(null)
 
+  useActionCable({
+    channel: "GamesChannel",
+    id: gameId
+  }, {
+    connected: () => console.log("connected"),
+    disconnected: () => console.log("disconnected"),
+    received: () => console.log("received")
+  })
+
+  // create solver & calculate solutions
   useEffect(() => {
     if (dice.length && gameState === gameStates.PLAYING && !solverRef.current) {
       solverRef.current = new BoggleSolver(dice.map(die => die.face))
+      // consider making this .thenable, solve may take a while
       setSolvedWords(solverRef.current.solve())
     }
   }, [dice, gameState])
 
   const submitWord = () => {
     if (solverRef.current.isValidWord(selectedWord) && !words.includes(selectedWord)) {
-      setTileState(1)
+      setValidatingState(1)
       setTimeout(() => {
-        setTileState(0)
+        setValidatingState(0)
         dispatch(gameActions.addWord(selectedWord))
       }, 300)
-      // also show the player some message?
-      // maybe a separate reducer for displaying messages, has a message text + message type, handles same action as board reducer
     } else {
-      setTileState(2)
+      setValidatingState(2)
       setTimeout(() => {
-        setTileState(0)
+        setValidatingState(0)
         dispatch(gameActions.clearSelected())
       }, 300)
     }
   }
+
+
+  // this is a crazy-ass workaround, work on something better lol
+  // begin dice select logic
+  const selectingRef = useRef(false)
+  const lastElementTouchRef = useRef()
+
+  const reffedDice = dice.map(die => {
+    const ref = React.createRef()
+    return { ...die, ref }
+  })
 
   const handleSelectStart = index => {
     selectingRef.current = true
@@ -88,17 +111,9 @@ const Game = () => {
   }
 
   const handleSelectEnd = () => {
-    // setTimeout(() => {
     selectingRef.current = false
     submitWord()
-    // }, 250)
   }
-
-  // this is a crazy-ass workaround, work on something better lol
-  const reffedDice = dice.map(die => {
-    const ref = React.createRef()
-    return { ...die, ref }
-  })
 
   const handleTouchMove = ({ touches }) => {
     const el = document.elementFromPoint(touches[0].clientX, touches[0].clientY)
@@ -110,33 +125,10 @@ const Game = () => {
     }
     lastElementTouchRef.current = el
   }
-
-  const handleReadyClick = () => {
-    let counter = 3
-    setCounterState(counter)
-
-    const interval = setInterval(() => {
-      if (counter === 0) {
-        dispatch(gameActions.startGame())
-        clearInterval(interval)
-      }
-      counter--
-      setCounterState(counter)
-    }, 1000)
-  }
+  // end dice select logic
 
   if (gameState === gameStates.PAUSED) {
-    if (counterState < 0) {
-      return (
-        <Button onClick={handleReadyClick}>
-          {counterState < 0 ? "READY?" : counterState}
-        </Button>
-      )
-    } else {
-      return (
-        <h1 style={{ fontSize: "4rem" }}>{counterState === 0 ? "GO!" : `${counterState}...`}</h1>
-      )
-    }
+    return <Countdown />
   }
 
   return (
@@ -151,7 +143,7 @@ const Game = () => {
             key={index}
             ref={ref}
             index={index}
-            tileState={selected ? tileState : 0}
+            validatingState={selected ? validatingState : 0}
             selected={selected}
             face={face}
             handleSelectStart={handleSelectStart}
@@ -160,8 +152,19 @@ const Game = () => {
         })}
         {gameState === gameStates.ENDED && <Blurrer />}
       </MainBoard>
-      <ActionBar ended={gameState === gameStates.ENDED} score={score} showSolution={showSolution} setShowSolution={setShowSolution} />
-      <WordList showSolution={showSolution} words={words} solvedWords={solvedWords} selectedWord={selectedWord} tileState={tileState} />
+      <ActionBar
+        ended={gameState === gameStates.ENDED}
+        score={score}
+        showSolution={showSolution}
+        setShowSolution={setShowSolution}
+      />
+      <WordList
+        showSolution={showSolution}
+        words={words}
+        solvedWords={solvedWords}
+        selectedWord={selectedWord}
+        validatingState={validatingState}
+      />
     </BoardContainer>
   )
 }

@@ -5,7 +5,7 @@ import { BoggleSolver } from '../../utils/words'
 const ListContainer = styled.ul`
   list-style: none;
   height: 35vh;
-  border: 4px solid black;
+  border: 4px solid var(--foreground);
   overflow-y: scroll;
   padding: 0.5rem;
 `
@@ -22,22 +22,22 @@ const Word = styled.li`
 `
 
 const SelectedWord = styled(Word)`
-  color: ${props => colorMap[props.tileState]};
+  color: ${props => colorMap[props.validatingState]};
 `
 
 const colorMap = {
-  0: "#aaa",
+  0: "var(--foreground)",
   1: "green",
   2: "red"
 }
 
-const WordList = ({ showSolution, words, solvedWords, selectedWord, tileState }) => {
+const WordList = ({ showSolution, words, solvedWords, selectedWord, validatingState }) => {
   if (showSolution) {
     return (
       <ListContainer>
         {solvedWords.map(word =>
           <Word key={word}>
-            <span style={{ color: `${words.includes(word) ? "green" : "black"}` }}>{word}</span>
+            <span style={{ color: `${words.includes(word) ? "green" : "var(--foreground)"}` }}>{word}</span>
             <span className="score">+{BoggleSolver.getPoints(word)}</span>
           </Word>
         )}
@@ -47,7 +47,7 @@ const WordList = ({ showSolution, words, solvedWords, selectedWord, tileState })
 
   return (
     <ListContainer>
-      <SelectedWord tileState={tileState}>
+      <SelectedWord validatingState={validatingState}>
         <span>{selectedWord}</span>
         <span className="score">{selectedWord.length ? `+${BoggleSolver.getPoints(selectedWord)}` : null}</span>
       </SelectedWord>

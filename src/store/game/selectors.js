@@ -4,6 +4,10 @@ export const getTimer = ({ game: { timer } }) => timer
 
 export const getGameState = ({ game: { gameState } }) => gameState
 
+export const getGameType = ({ game: { gameType } }) => gameType
+
+export const getGameId = ({ game: { id } }) => id
+
 export const getBoard = ({ game: { letters, selected } }) => {
   const mappedDice = letters.map((letter, index) => {
     return {

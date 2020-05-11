@@ -4,6 +4,7 @@ import Board from './components/pages/Game'
 import { Switch, Route } from 'react-router';
 import Home from './components/pages/Home';
 import CreateGame from './components/pages/CreateGame';
+import SignIn from './components/pages/SignIn';
 import Multiplayer from './components/pages/Multiplayer';
 
 const Main = styled.main`
@@ -18,7 +19,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-color: var(--background);
 `
 
 function App() {
@@ -34,6 +35,9 @@ function App() {
           </Route>
           <Route path="/game">
             <Board />
+          </Route>
+          <Route path="/signin">
+            <SignIn />
           </Route>
           <Route exact path="/">
             <Home />

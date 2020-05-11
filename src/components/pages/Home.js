@@ -1,26 +1,42 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
+
 import Button from '../shared/Button'
 
-const Home = () => {
+import * as userActions from '../../store/user/actions'
+import * as gameActions from '../../store/game/actions'
 
-  // const handleMuliplayer = () => {
-  //   // set the game type etc
-  //   // push history to next page
-  // }
+import { gameTypes } from '../../constants'
+
+const Home = () => {
+  const dispatch = useDispatch()
+  const history = useHistory()
+
+  const handleMultiPlayer = () => {
+    const username = localStorage.getItem("username")
+    if (username) {
+      dispatch(userActions.signIn({ username }))
+      dispatch(gameActions.setGameType(gameTypes.MULTI))
+      history.push("/multi")
+    } else {
+      history.push("/signin")
+    }
+  }
+
+  const handleSinglePlayer = () => {
+    dispatch(gameActions.setGameType(gameTypes.SINGLE))
+    history.push("/create")
+  }
 
   return (
     <>
-      <Link to="/create">
-        <Button>
-          1 PLAYER
-        </Button>
-      </Link>
-      <Link to="/multi">
-        <Button>
-          2+ PLAYERS
-        </Button>
-      </Link>
+      <Button onClick={handleSinglePlayer}>
+        1 PLAYER
+      </Button>
+      <Button onClick={handleMultiPlayer}>
+        2+ PLAYERS
+      </Button>
     </>
   )
 }

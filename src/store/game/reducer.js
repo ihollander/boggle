@@ -2,6 +2,7 @@ import * as types from './types'
 import { gameStates, gameTypes } from '../../constants'
 
 const defaultState = {
+  id: null,
   letters: ["A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"],
   selected: [],
   words: [],
@@ -30,14 +31,21 @@ const isValidSelection = ({ selected }, index) => {
 }
 
 const reducerActions = {
-  [types.CREATE_GAME](_, action) {
+  [types.SET_TYPE](state, action) {
     return {
-      ...defaultState,
-      gameState: gameStates.PAUSED,
-      timer: action.payload.timer
+      ...state,
+      gameType: action.payload
     }
   },
-  [types.START_GAME](state, action) {
+  [types.CREATE](state, action) {
+    return {
+      ...state,
+      gameState: gameStates.PAUSED,
+      timer: action.payload.timer,
+      id: action.payload.id
+    }
+  },
+  [types.START](state, action) {
     return {
       ...state,
       gameState: gameStates.PLAYING,
@@ -45,7 +53,7 @@ const reducerActions = {
       letters: action.payload
     }
   },
-  [types.END_GAME](state) {
+  [types.END](state) {
     return {
       ...state,
       gameState: gameStates.ENDED,
@@ -85,7 +93,6 @@ const reducerActions = {
 }
 
 const reducer = (state = defaultState, action) => {
-  // console.log(action)
   return reducerActions[action.type] ? reducerActions[action.type](state, action) : state
 }
 
