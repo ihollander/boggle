@@ -9,20 +9,35 @@ import { BoggleSolver } from '../../utils/words'
 const PageContainer = styled.div`
   height: 100%;
   width: 100%;
-  /* padding: 2rem; */
+`
+
+const PlayerList = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
   
-  h4 {
-    display: inline-block;
-    margin: 0.5rem 1rem;
+  h2 {
+    display: block;
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s;
+
+    &.active {
+      border-bottom: 1px solid var(--foreground);
+    }
   }
 `
 
 const ListContainer = styled.ul`
   list-style: none;
-  height: 80vh;
+  height: 60vh;
   border: 4px solid var(--foreground);
   overflow-y: scroll;
   padding: 0.5rem;
+`
+
+const Score = styled.h3`
+  margin: 0.25rem 0;
 `
 
 const Word = styled.li`
@@ -43,26 +58,29 @@ const EndScreen = ({ solvedWords }) => {
   const answerList = [{
     name: "Answers",
     words: solvedWords,
-    score: 0
+    score: solvedWords.reduce((sum, word) => sum + BoggleSolver.getPoints(word), 0)
   }, ...players]
-
-  console.log(answerList)
 
   const [selected, setSelected] = useState(user)
 
   const activeList = answerList.find(player => player.name === selected)
 
+  const playerWords = (answerList.find(player => player.name === user)?.words || [])
+
   return (
     <PageContainer>
-      {players.length && answerList.map(player => (
-        <h4 key={player.name} onClick={() => setSelected(player.name)} style={{ textDecoration: `${activeList.name === player.name ? "underline" : "none"}` }}>
-          {player.name}
-        </h4>
-      ))}
+      <PlayerList>
+        {players.length && answerList.map(player => (
+          <h2 key={player.name} onClick={() => setSelected(player.name)} className={`${activeList.name === player.name ? "active" : ""}`}>
+            {player.name}
+          </h2>
+        ))}
+      </PlayerList>
+      {players.length && <Score>Score: {activeList.score}</Score>}
       <ListContainer>
-        {activeList.words.map(word => (
+        {activeList && activeList.words.map(word => (
           <Word key={word}>
-            <span style={{ color: `${activeList.name !== "Answers" && solvedWords.includes(word) ? "green" : "var(--foreground)"}` }}>{word}</span>
+            <span style={{ color: `${activeList.name === "Answers" && playerWords.includes(word) ? "green" : "var(--foreground)"}` }}>{word}</span>
             <span className="score">+{BoggleSolver.getPoints(word)}</span>
           </Word>
         ))}

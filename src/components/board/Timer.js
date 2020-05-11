@@ -1,10 +1,11 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useInterval } from '../../hooks/useInterval'
+import * as userSelectors from '../../store/user/selectors'
 import * as gameSelectors from '../../store/game/selectors'
 import * as gameActions from '../../store/game/actions'
 import { gameStates } from '../../constants'
-import { endGame } from '../../api/games'
+import { endGame, submitWords } from '../../api/games'
 
 const formatTime = time => {
   const m = Math.floor(time / 60)
@@ -19,10 +20,13 @@ const Timer = () => {
   const timer = useSelector(gameSelectors.getTimer)
   const gameState = useSelector(gameSelectors.getGameState)
   const id = useSelector(gameSelectors.getGameId)
+  const username = useSelector(userSelectors.getUser)
+  const { words } = useSelector(gameSelectors.getWords)
 
   useInterval(() => {
     if (timer <= 1) {
       endGame(id)
+      submitWords(id, { username, words })
     } else {
       dispatch(gameActions.timerTick())
     }

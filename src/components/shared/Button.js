@@ -15,6 +15,7 @@ const Button = styled.button`
   margin: 2rem;
   box-shadow: 14px 14px var(--shadow);
   transition: transform 0.2s, box-shadow 0.2s;
+  text-transform: uppercase;
 
   &:focus {
     outline: none;

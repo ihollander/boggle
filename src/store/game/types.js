@@ -1,6 +1,7 @@
 const prefix = "GAME"
 
 export const JOINED = `${prefix}_JOINED`
+export const LEFT = `${prefix}_LEFT`
 export const SET_TYPE = `${prefix}_SET_TYPE`
 export const CREATE = `${prefix}_CREATE`
 export const STARTING = `${prefix}_STARTING`

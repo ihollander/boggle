@@ -4,8 +4,3 @@ export const gameStates = {
   PLAYING: "PLAYING",
   ENDED: "ENDED"
 }
-
-export const gameTypes = {
-  SINGLE: "SINGLE",
-  MULTI: "MULTI"
-}

@@ -1,5 +1,5 @@
 import * as types from './types'
-import { gameStates, gameTypes } from '../../constants'
+import { gameStates } from '../../constants'
 
 const defaultState = {
   id: null,
@@ -7,7 +7,6 @@ const defaultState = {
   selected: [],
   words: [],
   gameState: gameStates.WAITING,
-  gameType: gameTypes.SINGLE,
   timer: 0,
   players: []
 }
@@ -32,12 +31,6 @@ const isValidSelection = ({ selected }, index) => {
 }
 
 const reducerActions = {
-  [types.SET_TYPE](state, action) {
-    return {
-      ...state,
-      gameType: action.payload
-    }
-  },
   [types.CREATE](state, action) {
     return {
       ...state,
@@ -57,9 +50,17 @@ const reducerActions = {
       letters: action.payload.dice.split("")
     }
   },
+  [types.LEFT](state, action) {
+    return {
+      ...state,
+      players: action.payload,
+      gameState: gameStates.WAITING,
+    }
+  },
   [types.STARTING](state) {
     return {
       ...state,
+      words: [],
       gameState: gameStates.STARTING,
     }
   },

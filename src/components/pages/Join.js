@@ -36,8 +36,6 @@ const Join = () => {
     getGames().then(setGames)
   }, [])
 
-  console.log(games)
-
   return (
 
     <GameList>

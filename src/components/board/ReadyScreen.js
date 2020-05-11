@@ -10,6 +10,7 @@ const PlayerHeader = styled.h1`
 const PlayerList = styled.ul`
   list-style: none;
   text-align: center;
+  margin-bottom: 8rem;
 `
 
 const Player = styled.li`
@@ -23,10 +24,15 @@ const ReadyScreen = ({ id, players }) => {
     startGame(id)
   }
 
+  const handleCopyClick = () => {
+    const url = window.location.origin + "/games/" + id
+    navigator.clipboard.writeText(url)
+  }
+
   return (
     <>
       <Button onClick={handleReadyClick}>
-        Ready?
+        Start
       </Button>
       <PlayerHeader>Players:</PlayerHeader>
       <PlayerList>
@@ -34,6 +40,9 @@ const ReadyScreen = ({ id, players }) => {
           <Player key={player.name}>{player.name}</Player>
         ))}
       </PlayerList>
+      <Button size="small" onClick={handleCopyClick}>
+        Copy Invite
+      </Button>
     </>
   )
 }

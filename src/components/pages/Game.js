@@ -6,22 +6,21 @@ import styled from 'styled-components'
 import MainBoard from '../board/MainBoard'
 import WordList from '../board/WordList'
 import ActionBar from '../board/ActionBar'
+import CountdownScreen from '../board/CountdownScreen'
+import ReadyScreen from '../board/ReadyScreen'
+import EndScreen from '../board/EndScreen'
+
+import useActionCable from '../../actioncable/useActionCable'
 
 import * as userSelectors from '../../store/user/selectors'
 import * as gameSelectors from '../../store/game/selectors'
 import * as gameActions from '../../store/game/actions'
 import { gameStates } from '../../constants'
 import { BoggleSolver } from '../../utils/words'
-import CountdownScreen from '../board/CountdownScreen'
-import useActionCable from '../../actioncable/useActionCable'
-import ReadyScreen from '../board/ReadyScreen'
-import { submitWords } from '../../api/games'
-import EndScreen from '../board/EndScreen'
 
 const BoardContainer = styled.section`
   height: 100vh;
   margin: 0 auto;
-  /* padding: 2rem; */
 `
 
 const Game = () => {
@@ -45,26 +44,16 @@ const Game = () => {
     id: id,
     name: username
   }, {
-    connected: data => console.log("connected", data),
-    disconnected: data => console.log("disconnected", data),
     received: action => {
-      console.log("cable", action)
       if (action.type) {
         dispatch(action)
       }
     }
   })
 
-  useEffect(() => {
-    if (gameState === gameStates.ENDED) {
-      // TODO: this should just be emitted to the channel
-      submitWords(id, { username, words })
-    }
-  }, [gameState, id, username, words])
-
   // create solver & calculate solutions
   useEffect(() => {
-    if (dice.length && gameState === gameStates.PLAYING && !solverRef.current) {
+    if (dice.length && (gameState === gameStates.PLAYING || gameState === gameStates.ENDED) && !solverRef.current) {
       solverRef.current = new BoggleSolver(dice.map(die => die.face))
       // consider making this .thenable, solve may take a while
       setSolvedWords(solverRef.current.solve())

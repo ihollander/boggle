@@ -8,14 +8,12 @@ const ActionCableProvider = ({ ws, children }) => {
 
   useEffect(() => {
     if (consumer == null) {
-      console.log("ws connecting")
       setConsumer(
         actioncable.createConsumer(ws)
       )
     }
     return () => {
       if (consumer) {
-        console.log("ws disconnecting")
         consumer.disconnect()
       }
     }
