@@ -6,9 +6,10 @@ const defaultState = {
   letters: ["A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"],
   selected: [],
   words: [],
-  gameState: gameStates.PAUSED,
+  gameState: gameStates.WAITING,
   gameType: gameTypes.SINGLE,
-  timer: 0
+  timer: 0,
+  players: []
 }
 
 const isValidSelection = ({ selected }, index) => {
@@ -40,17 +41,33 @@ const reducerActions = {
   [types.CREATE](state, action) {
     return {
       ...state,
-      gameState: gameStates.PAUSED,
+      gameState: gameStates.WAITING,
       timer: action.payload.timer,
-      id: action.payload.id
+      id: action.payload.name,
+      players: action.payload.players,
+      letters: action.payload.letters
     }
   },
-  [types.START](state, action) {
+  [types.JOINED](state, action) {
+    return {
+      ...state,
+      timer: action.payload.timer,
+      id: action.payload.name,
+      players: action.payload.players,
+      letters: action.payload.dice.split("")
+    }
+  },
+  [types.STARTING](state) {
+    return {
+      ...state,
+      gameState: gameStates.STARTING,
+    }
+  },
+  [types.START](state) {
     return {
       ...state,
       gameState: gameStates.PLAYING,
       timer: state.timer > 0 ? state.timer : 10, // testing
-      letters: action.payload
     }
   },
   [types.END](state) {
@@ -88,6 +105,12 @@ const reducerActions = {
     return {
       ...state,
       timer: state.timer - 1
+    }
+  },
+  [types.WORDS_RECEIVED](state, action) {
+    return {
+      ...state,
+      players: state.players.map(player => player.name === action.payload.username ? { ...player, words: action.payload.words } : player)
     }
   }
 }

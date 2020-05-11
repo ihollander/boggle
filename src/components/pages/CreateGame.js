@@ -1,24 +1,36 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
 import Form from '../shared/Form'
 import Button from '../shared/Button'
 
+import { createGame } from '../../api/games'
 import * as gameActions from '../../store/game/actions'
+import * as userSelectors from '../../store/user/selectors'
 
 const CreateGame = () => {
   const history = useHistory()
   const dispatch = useDispatch()
 
+  const username = useSelector(userSelectors.getUser)
+  if (!username) {
+    history.push("/")
+  }
+
   const [gridSize, setGridSize] = useState("4")
   const [timer, setTimer] = useState("120")
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
-    const action = gameActions.createGame({ timer: parseInt(timer), gridSize: parseInt(gridSize) })
-    dispatch(action)
-    history.push("/game/" + action.payload.id)
+    try {
+      const { name, status, players, dice } = await createGame({ username, gridSize, timer })
+      const letters = dice.split("")
+      dispatch(gameActions.createGame({ timer: parseInt(timer), gridSize: parseInt(gridSize), id: name, status, players, letters }))
+      history.push("/games/" + name)
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   return (

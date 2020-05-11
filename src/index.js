@@ -8,16 +8,10 @@ import ActionCableProvider from './actioncable/Provider'
 import * as serviceWorker from './serviceWorker';
 import store from './store'
 
-const ws = "ws://localhost:3000/cable"
-
-if (window.matchMedia('(prefers-color-scheme)').media !== 'not all') {
-  console.log('🎉 Dark mode is supported');
-}
-
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ActionCableProvider ws={ws}>
+      <ActionCableProvider ws={process.env.REACT_APP_WS_ROOT}>
         <Router>
           <App />
         </Router>

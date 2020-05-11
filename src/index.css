@@ -19,6 +19,11 @@ body {
   background-color: var(--background);
 }
 
+a {
+  color: var(--foreground);
+  text-decoration: none;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground: white;

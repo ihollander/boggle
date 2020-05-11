@@ -8,7 +8,7 @@ import Button from '../shared/Button'
 import * as userActions from '../../store/user/actions'
 
 const SignIn = () => {
-  const [username, setUsername] = useState(localStorage.getItem("username") || "")
+  const [username, setUsername] = useState("")
   const dispatch = useDispatch()
   const history = useHistory()
 

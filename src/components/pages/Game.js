@@ -1,35 +1,38 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import MainBoard from '../board/MainBoard'
 import WordList from '../board/WordList'
 import ActionBar from '../board/ActionBar'
 
+import * as userSelectors from '../../store/user/selectors'
 import * as gameSelectors from '../../store/game/selectors'
 import * as gameActions from '../../store/game/actions'
 import { gameStates } from '../../constants'
 import { BoggleSolver } from '../../utils/words'
-import Countdown from '../board/Countdown'
+import CountdownScreen from '../board/CountdownScreen'
 import useActionCable from '../../actioncable/useActionCable'
+import ReadyScreen from '../board/ReadyScreen'
+import { submitWords } from '../../api/games'
+import EndScreen from '../board/EndScreen'
 
 const BoardContainer = styled.section`
-  padding: 2rem;
   height: 100vh;
   margin: 0 auto;
+  /* padding: 2rem; */
 `
 
-
 const Game = () => {
-  const history = useHistory()
   const dispatch = useDispatch()
+  const { id } = useParams()
+
   const { dice, selectedWord } = useSelector(gameSelectors.getBoard)
   const { words, score } = useSelector(gameSelectors.getWords)
   const gameState = useSelector(gameSelectors.getGameState)
-
-  const gameId = useSelector(gameSelectors.getGameId)
-  if (!gameId) history.push("/")
+  const username = useSelector(userSelectors.getUser)
+  const players = useSelector(gameSelectors.getPlayers)
 
   const [showSolution, setShowSolution] = useState(false)
   const [solvedWords, setSolvedWords] = useState([])
@@ -39,12 +42,25 @@ const Game = () => {
 
   useActionCable({
     channel: "GamesChannel",
-    id: gameId
+    id: id,
+    name: username
   }, {
-    connected: () => console.log("connected"),
-    disconnected: () => console.log("disconnected"),
-    received: () => console.log("received")
+    connected: data => console.log("connected", data),
+    disconnected: data => console.log("disconnected", data),
+    received: action => {
+      console.log("cable", action)
+      if (action.type) {
+        dispatch(action)
+      }
+    }
   })
+
+  useEffect(() => {
+    if (gameState === gameStates.ENDED) {
+      // TODO: this should just be emitted to the channel
+      submitWords(id, { username, words })
+    }
+  }, [gameState, id, username, words])
 
   // create solver & calculate solutions
   useEffect(() => {
@@ -71,10 +87,23 @@ const Game = () => {
     }
   }
 
-  if (gameState === gameStates.PAUSED) {
-    return <Countdown />
+  // WAITING => show button/players
+  if (gameState === gameStates.WAITING) {
+    return <ReadyScreen players={players} id={id} />
   }
 
+  // STARTING => show countdown
+  if (gameState === gameStates.STARTING) {
+    return <CountdownScreen />
+  }
+
+  // ENDED => show scores/words
+  if (gameState === gameStates.ENDED) {
+    // get scores from everyone somehow
+    return <EndScreen solvedWords={solvedWords} />
+  }
+
+  // PLAYING => 
   return (
     <BoardContainer>
       <MainBoard

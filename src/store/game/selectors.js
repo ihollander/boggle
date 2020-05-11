@@ -8,6 +8,13 @@ export const getGameType = ({ game: { gameType } }) => gameType
 
 export const getGameId = ({ game: { id } }) => id
 
+export const getPlayers = ({ game: { players } }) =>
+  players.map(player => ({
+    name: player.name,
+    words: (player.words || []),
+    score: (player.words || []).reduce((sum, word) => sum + BoggleSolver.getPoints(word), 0)
+  }))
+
 export const getBoard = ({ game: { letters, selected } }) => {
   const mappedDice = letters.map((letter, index) => {
     return {

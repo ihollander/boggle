@@ -4,6 +4,7 @@ import { useInterval } from '../../hooks/useInterval'
 import * as gameSelectors from '../../store/game/selectors'
 import * as gameActions from '../../store/game/actions'
 import { gameStates } from '../../constants'
+import { endGame } from '../../api/games'
 
 const formatTime = time => {
   const m = Math.floor(time / 60)
@@ -17,10 +18,11 @@ const Timer = () => {
 
   const timer = useSelector(gameSelectors.getTimer)
   const gameState = useSelector(gameSelectors.getGameState)
+  const id = useSelector(gameSelectors.getGameId)
 
   useInterval(() => {
     if (timer <= 1) {
-      dispatch(gameActions.endGame())
+      endGame(id)
     } else {
       dispatch(gameActions.timerTick())
     }

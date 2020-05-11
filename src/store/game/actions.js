@@ -1,30 +1,28 @@
-import nameGenerator from 'project-name-generator';
-
 import * as types from './types'
 
-// dice packs
-const fourByFourDice = ["AAEEGN", "ELRTTY", "AOOTTW", "ABBJOO", "EHRTVW", "CIMOTU", "DISTTY", "EIOSST", "DELRVY", "ACHOPS", "HIMNQU", "EEINSU", "EEGHNW", "AFFKPS", "HLNNRZ", "DEILRX"]
+// dice packs -> moved to server
+// const fourByFourDice = ["AAEEGN", "ELRTTY", "AOOTTW", "ABBJOO", "EHRTVW", "CIMOTU", "DISTTY", "EIOSST", "DELRVY", "ACHOPS", "HIMNQU", "EEINSU", "EEGHNW", "AFFKPS", "HLNNRZ", "DEILRX"]
 
-const roll = () => Math.floor(Math.random() * 6)
-const shuffle = array => array.sort(() => Math.random() < 0.5 ? -1 : 1)
+// const roll = () => Math.floor(Math.random() * 6)
+// const shuffle = array => array.sort(() => Math.random() < 0.5 ? -1 : 1)
+
+// const shuffled = shuffle([...fourByFourDice])
+// const letters = shuffled.map(die => die[roll()])
+
+// send to API & let actioncable response kick things off instead?
+// what about single player games
+// maybe leave this for single player games & have another flow for multiplayer
 
 export const setGameType = type => ({ type: types.SET_TYPE, payload: type })
 
-export const createGame = ({ gridSize, timer }) => ({
+export const createGame = ({ gridSize, timer, id, status, players, letters }) => ({
   type: types.CREATE,
-  payload: {
-    gridSize,
-    timer,
-    id: nameGenerator({ number: true }).dashed
-  }
+  payload: { gridSize, timer, id, status, players, letters }
 })
 
-export const startGame = () => {
-  const shuffled = shuffle([...fourByFourDice])
-  const letters = shuffled.map(die => die[roll()])
+export const startGame = () => ({ type: types.START })
 
-  return { type: types.START, payload: letters }
-}
+export const startingGame = () => ({ type: types.STARTING })
 
 export const endGame = () => ({ type: types.END })
 

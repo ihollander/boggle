@@ -1,5 +1,6 @@
 export const gameStates = {
-  PAUSED: "PAUSED",
+  WAITING: "WAITING",
+  STARTING: "STARTING",
   PLAYING: "PLAYING",
   ENDED: "ENDED"
 }
