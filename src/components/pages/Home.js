@@ -8,14 +8,14 @@ const Home = () => {
     <>
       <Link to="/join">
         <Button>
-          bogle
+          JOIN
         </Button>
       </Link>
-      {/* <Link to="/create">
+      <Link to="/create">
         <Button>
           CREATE
         </Button>
-      </Link> */}
+      </Link>
     </>
   )
 }
