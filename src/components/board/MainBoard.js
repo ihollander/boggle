@@ -1,10 +1,8 @@
 import React, { useRef } from 'react'
-import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
 import Dice from './Dice'
 
-import * as gameActions from '../../store/game/actions'
 import { gameStates } from '../../constants'
 
 const BoardContainer = styled.div`
@@ -25,9 +23,7 @@ const Blurrer = styled.div`
   backdrop-filter: blur(1px);
 `
 
-const MainBoard = ({ dice, gameState, validatingState, submitWord }) => {
-  const dispatch = useDispatch()
-
+const MainBoard = ({ dice, gameState, validatingState, submitWord, selectLetter }) => {
   const selectingRef = useRef(false)
   const lastElementTouchRef = useRef()
 
@@ -43,7 +39,7 @@ const MainBoard = ({ dice, gameState, validatingState, submitWord }) => {
 
   const handleSelect = index => {
     if (gameState === gameStates.PLAYING && selectingRef.current) {
-      dispatch(gameActions.select(index))
+      selectLetter(index)
     }
   }
 

@@ -19,8 +19,9 @@ import { gameStates } from '../../constants'
 import { BoggleSolver } from '../../utils/words'
 
 const BoardContainer = styled.section`
-  height: 100vh;
+  height: calc(100vh - 4rem);
   margin: 0 auto;
+  overscroll-behavior-y: none;
 `
 
 const Game = () => {
@@ -76,6 +77,10 @@ const Game = () => {
     }
   }
 
+  const selectLetter = index => {
+    dispatch(gameActions.select(index))
+  }
+
   // WAITING => show button/players
   if (gameState === gameStates.WAITING) {
     return <ReadyScreen players={players} id={id} />
@@ -89,7 +94,7 @@ const Game = () => {
   // ENDED => show scores/words
   if (gameState === gameStates.ENDED) {
     // get scores from everyone somehow
-    return <EndScreen solvedWords={solvedWords} />
+    return <EndScreen solvedWords={solvedWords} players={players} username={username} />
   }
 
   // PLAYING => 
@@ -99,6 +104,7 @@ const Game = () => {
         dice={dice}
         gameState={gameState}
         validatingState={validatingState}
+        selectLetter={selectLetter}
         submitWord={submitWord}
       />
       <ActionBar

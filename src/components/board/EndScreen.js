@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux'
 
-import * as gameSelectors from '../../store/game/selectors'
-import * as userSelectors from '../../store/user/selectors'
 import { BoggleSolver } from '../../utils/words'
 
 const PageContainer = styled.div`
@@ -51,21 +48,19 @@ const Word = styled.li`
   }
 `
 
-const EndScreen = ({ solvedWords }) => {
-  const players = useSelector(gameSelectors.getPlayers)
-  const user = useSelector(userSelectors.getUser)
+const EndScreen = ({ solvedWords, players, username }) => {
 
   const answerList = [{
     name: "Answers",
     words: solvedWords,
-    score: solvedWords.reduce((sum, word) => sum + BoggleSolver.getPoints(word), 0)
+    score: BoggleSolver.getTotalPoints(solvedWords)
   }, ...players]
 
-  const [selected, setSelected] = useState(user)
+  const [selected, setSelected] = useState(username)
 
   const activeList = answerList.find(player => player.name === selected)
 
-  const playerWords = (answerList.find(player => player.name === user)?.words || [])
+  const playerWords = (answerList.find(player => player.name === username)?.words || [])
 
   return (
     <PageContainer>

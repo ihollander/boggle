@@ -1,13 +1,6 @@
 
 import dictionary from './dictionary.json'
 
-export const isValidWord = word => {
-  if (word.length < 3) return false;
-
-  word = word.toUpperCase()
-  return !!dictionary.find(entry => word === entry)
-}
-
 export const getScore = word => {
   switch (word.length) {
     case 0:
@@ -117,6 +110,10 @@ export class BoggleSolver {
       }
     }
     return neighbors
+  }
+
+  static getTotalPoints(words) {
+    return words.reduce((sum, word) => sum + BoggleSolver.getPoints(word), 0)
   }
 
   static getPoints(word) {

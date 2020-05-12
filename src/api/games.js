@@ -1,5 +1,9 @@
 const BASE_URL = process.env.REACT_APP_HTTP_ROOT
 
+const defaultHeaders = {
+  "Content-Type": "application/json"
+}
+
 const fetchAndParse = async (url, options) => {
   const response = await fetch(url, options)
   if (response.status < 500) {
@@ -17,9 +21,7 @@ const fetchAndParse = async (url, options) => {
 export const createGame = ({ username, gridSize = 4, timer = 120 }) => {
   return fetchAndParse(BASE_URL + "/games", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: defaultHeaders,
     body: JSON.stringify({ username, gridSize, timer })
   })
 }
@@ -40,12 +42,14 @@ export const endGame = id => {
   })
 }
 
-export const submitWords = (id, { username, words }) => {
+export const submitWords = (id, { username, words, score }) => {
   return fetchAndParse(BASE_URL + `/games/${id}/submit_words`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ username, words })
+    headers: defaultHeaders,
+    body: JSON.stringify({ username, words, score })
   })
+}
+
+export const highScores = () => {
+  return fetchAndParse(BASE_URL + "/games/high_scores")
 }

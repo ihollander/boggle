@@ -3,11 +3,10 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
 const Nav = styled.nav`
-  height: 6vh;
-  padding: 0.25rem 1rem;
-  width: 100%;
   background-color: var(--foreground);
+  height: 4rem; 
   display: flex;
+  justify-content: space-between;
   align-items: center;
 
   a {
@@ -23,6 +22,9 @@ const NavBar = () => {
     <Nav>
       <Link to="/">
         Home
+      </Link>
+      <Link to="/scores">
+        High Scores
       </Link>
     </Nav>
   )

@@ -12,7 +12,7 @@ export const getPlayers = ({ game: { players } }) =>
   players.map(player => ({
     name: player.name,
     words: (player.words || []),
-    score: (player.words || []).reduce((sum, word) => sum + BoggleSolver.getPoints(word), 0)
+    score: BoggleSolver.getTotalPoints(player.words || [])
   }))
 
 export const getBoard = ({ game: { letters, selected } }) => {
@@ -33,8 +33,6 @@ export const getBoard = ({ game: { letters, selected } }) => {
 export const getWords = ({ game: { words } }) => {
   return {
     words,
-    score: words.reduce((sum, word) => {
-      return sum + BoggleSolver.getPoints(word)
-    }, 0)
+    score: BoggleSolver.getTotalPoints(words)
   }
 }

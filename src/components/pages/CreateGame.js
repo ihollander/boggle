@@ -15,7 +15,8 @@ const CreateGame = () => {
 
   const username = useSelector(userSelectors.getUser)
 
-  const [gridSize, setGridSize] = useState("4")
+  // const [gridSize, setGridSize] = useState("4")
+  const [gridSize] = useState("4")
   const [timer, setTimer] = useState("120")
 
   const handleSubmit = async e => {
@@ -33,12 +34,12 @@ const CreateGame = () => {
   return (
     <>
       <Form onSubmit={handleSubmit}>
-        <label>Grid Size:</label>
+        {/* <label>Grid Size:</label>
         <select value={gridSize} onChange={e => setGridSize(e.target.value)}>
           <option value="3">3x3</option>
           <option value="4">4x4</option>
           <option value="5">5x5</option>
-        </select>
+        </select> */}
         <label>Time (seconds):</label>
         <input type="number" step={1} min={0} value={timer} onChange={e => setTimer(e.target.value)} />
         <Button size="medium">CREATE</Button>

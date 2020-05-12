@@ -11,16 +11,18 @@ import * as userSelectors from './store/user/selectors'
 import * as userActions from './store/user/actions'
 import Join from './components/pages/Join'
 import NavBar from './components/layout/NavBar'
+import Scores from './components/pages/Scores'
 
 const Main = styled.main`
-  background-color: #333;
+  display: flex;
+  height: calc(100vh - 4rem);
+  width: 100vw;
+  justify-content: center;
 `
 
 const Wrapper = styled.div`
-  max-width: 60vh;
-  margin: 0 auto;
-  height: 94vh;
-  min-height: 700px;
+  width: 100%;
+  max-width: 500px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -38,11 +40,6 @@ function App() {
     fetch(process.env.REACT_APP_HTTP_ROOT)
   }, [])
 
-  // viewport scale
-  useEffect(() => {
-    document.querySelector("meta[name=viewport]").setAttribute("content", `height=${window.innerHeight}px, width=${window.innerWidth}px, initial-scale=1.0`);
-  }, [])
-
   useEffect(() => {
     const username = localStorage.getItem("username")
     if (username) {
@@ -51,28 +48,33 @@ function App() {
   }, [dispatch, username])
 
   return (
-    <Main>
+    <>
       <NavBar />
-      <Wrapper>
-        <Switch>
-          <Route path="/create">
-            {username ? <CreateGame /> : <SignIn />}
-          </Route>
-          <Route path="/join">
-            {username ? <Join /> : <SignIn />}
-          </Route>
-          <Route path="/games/:id">
-            <Board />
-          </Route>
-          <Route path="/signin">
-            <SignIn />
-          </Route>
-          <Route exact path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </Wrapper>
-    </Main>
+      <Main>
+        <Wrapper>
+          <Switch>
+            <Route path="/create">
+              {username ? <CreateGame /> : <SignIn />}
+            </Route>
+            <Route path="/join">
+              {username ? <Join /> : <SignIn />}
+            </Route>
+            <Route path="/games/:id">
+              <Board />
+            </Route>
+            <Route path="/scores">
+              <Scores />
+            </Route>
+            <Route path="/signin">
+              <SignIn />
+            </Route>
+            <Route exact path="/">
+              <Home />
+            </Route>
+          </Switch>
+        </Wrapper>
+      </Main>
+    </>
   );
 }
 
