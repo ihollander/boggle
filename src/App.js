@@ -1,14 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { Switch, Route } from 'react-router'
 
+import NavBar from './components/layout/NavBar'
+import Loader from './components/shared/Loader'
 import Board from './components/pages/Game'
 import Home from './components/pages/Home'
 import CreateGame from './components/pages/CreateGame'
 import SignIn from './components/pages/SignIn'
 import Join from './components/pages/Join'
-import NavBar from './components/layout/NavBar'
 import Scores from './components/pages/Scores'
 
 import * as userSelectors from './store/user/selectors'
@@ -35,10 +36,12 @@ const Wrapper = styled.div`
 function App() {
   const dispatch = useDispatch()
   const username = useSelector(userSelectors.getUser)
+  const [ready, setReady] = useState(false)
 
   // wake up heroku server
   useEffect(() => {
     fetch(process.env.REACT_APP_HTTP_ROOT)
+      .then(() => setReady(true))
   }, [])
 
   useEffect(() => {
@@ -53,26 +56,28 @@ function App() {
       <NavBar />
       <Main>
         <Wrapper>
-          <Switch>
-            <Route path="/create">
-              {username ? <CreateGame /> : <SignIn />}
-            </Route>
-            <Route path="/join">
-              {username ? <Join /> : <SignIn />}
-            </Route>
-            <Route path="/games/:id">
-              <Board />
-            </Route>
-            <Route path="/scores">
-              <Scores />
-            </Route>
-            <Route path="/signin">
-              <SignIn />
-            </Route>
-            <Route exact path="/">
-              <Home />
-            </Route>
-          </Switch>
+          {!ready ? <Loader /> : (
+            <Switch>
+              <Route path="/create">
+                {username ? <CreateGame /> : <SignIn />}
+              </Route>
+              <Route path="/join">
+                {username ? <Join /> : <SignIn />}
+              </Route>
+              <Route path="/games/:id">
+                <Board />
+              </Route>
+              <Route path="/scores">
+                <Scores />
+              </Route>
+              <Route path="/signin">
+                <SignIn />
+              </Route>
+              <Route exact path="/">
+                <Home />
+              </Route>
+            </Switch>
+          )}
         </Wrapper>
       </Main>
     </>
