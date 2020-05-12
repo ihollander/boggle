@@ -6,28 +6,9 @@ const defaultState = {
   letters: ["A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"],
   selected: [],
   words: [],
-  gameState: gameStates.WAITING,
+  gameState: gameStates.UNKNOWN,
   timer: 0,
   players: []
-}
-
-const isValidSelection = ({ selected }, index) => {
-  if (selected.length === 0) return true
-
-  const lastSelection = selected[selected.length - 1]
-
-  const x = lastSelection % 4
-  const y = Math.floor(lastSelection / 4)
-  let neighbors = []
-  for (let nx = Math.max(0, x - 1); nx < Math.min(x + 2, 4); nx++) {
-    for (let ny = Math.max(0, y - 1); ny < Math.min(y + 2, 4); ny++) {
-      if (!(nx === x && ny === y)) {
-        neighbors.push((ny * 4) + nx)
-      }
-    }
-  }
-
-  return neighbors.includes(index)
 }
 
 const reducerActions = {
@@ -47,6 +28,7 @@ const reducerActions = {
       timer: action.payload.timer,
       id: action.payload.name,
       players: action.payload.players,
+      gameState: gameStates.WAITING,
       letters: action.payload.dice.split("")
     }
   },
@@ -54,7 +36,7 @@ const reducerActions = {
     return {
       ...state,
       players: action.payload,
-      gameState: gameStates.WAITING,
+      gameState: gameStates.UNKNOWN,
     }
   },
   [types.STARTING](state) {
@@ -79,14 +61,15 @@ const reducerActions = {
     }
   },
   [types.TOGGLE_SELECTED](state, action) {
-    const isValid = isValidSelection(state, action.payload)
-    if (isValid) {
-      return {
-        ...state,
-        selected: [...state.selected, action.payload]
-      }
-    } else {
-      return state
+    return {
+      ...state,
+      selected: [...state.selected, action.payload]
+    }
+  },
+  [types.SET_SELECTED](state, action) {
+    return {
+      ...state,
+      selected: action.payload
     }
   },
   [types.ADD_WORD](state, action) {

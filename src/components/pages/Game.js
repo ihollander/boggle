@@ -17,6 +17,7 @@ import * as gameSelectors from '../../store/game/selectors'
 import * as gameActions from '../../store/game/actions'
 import { gameStates } from '../../constants'
 import BoggleSolver from '../../utils/BoggleSolver'
+import Loader from '../shared/Loader'
 
 const BoardContainer = styled.section`
   height: calc(100vh - 4rem);
@@ -24,11 +25,30 @@ const BoardContainer = styled.section`
   overscroll-behavior-y: none;
 `
 
+const isValidSelection = (selected, index) => {
+  if (selected.length === 0) return true
+
+  const lastSelection = selected[selected.length - 1]
+
+  const x = lastSelection % 4
+  const y = Math.floor(lastSelection / 4)
+  let neighbors = []
+  for (let nx = Math.max(0, x - 1); nx < Math.min(x + 2, 4); nx++) {
+    for (let ny = Math.max(0, y - 1); ny < Math.min(y + 2, 4); ny++) {
+      if (!(nx === x && ny === y)) {
+        neighbors.push((ny * 4) + nx)
+      }
+    }
+  }
+
+  return neighbors.includes(index)
+}
+
 const Game = () => {
   const dispatch = useDispatch()
   const { id } = useParams()
 
-  const { dice, selectedWord } = useSelector(gameSelectors.getBoard)
+  const { dice, selected, selectedWord } = useSelector(gameSelectors.getBoard)
   const { words, score } = useSelector(gameSelectors.getWords)
   const gameState = useSelector(gameSelectors.getGameState)
   const username = useSelector(userSelectors.getUser)
@@ -46,6 +66,7 @@ const Game = () => {
     name: username
   }, {
     received: action => {
+      console.log(action)
       if (action.type) {
         dispatch(action)
       }
@@ -78,7 +99,14 @@ const Game = () => {
   }
 
   const selectLetter = index => {
-    dispatch(gameActions.select(index))
+    if (isValidSelection(selected, index)) {
+      dispatch(gameActions.select(index))
+    }
+  }
+
+  // UNKNOWN => still need to fetch
+  if (gameState === gameStates.UNKNOWN) {
+    return <Loader />
   }
 
   // WAITING => show button/players
@@ -104,6 +132,7 @@ const Game = () => {
         dice={dice}
         gameState={gameState}
         validatingState={validatingState}
+        currentSelected={selected}
         selectLetter={selectLetter}
         submitWord={submitWord}
       />

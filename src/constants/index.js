@@ -1,4 +1,5 @@
 export const gameStates = {
+  UNKNOWN: "UNKNOWN",
   WAITING: "WAITING",
   STARTING: "STARTING",
   PLAYING: "PLAYING",

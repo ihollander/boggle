@@ -28,6 +28,8 @@ export const endGame = () => ({ type: types.END })
 
 export const select = index => ({ type: types.TOGGLE_SELECTED, payload: index })
 
+export const setSelected = letters => ({ type: types.SET_SELECTED, payload: letters })
+
 export const addWord = word => ({ type: types.ADD_WORD, payload: word })
 
 export const clearSelected = () => ({ type: types.CLEAR_SELECTED })

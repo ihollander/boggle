@@ -6,15 +6,11 @@ import Button from '../shared/Button'
 const Home = () => {
   return (
     <>
-      <Link to="/join">
-        <Button>
-          JOIN
-        </Button>
-      </Link>
       <Link to="/create">
-        <Button>
-          CREATE
-        </Button>
+        <Button>New</Button>
+      </Link>
+      <Link to="/join">
+        <Button>Join</Button>
       </Link>
     </>
   )

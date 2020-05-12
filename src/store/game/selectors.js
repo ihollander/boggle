@@ -26,6 +26,7 @@ export const getBoard = ({ game: { letters, selected } }) => {
 
   return {
     dice: mappedDice,
+    selected,
     selectedWord: selected.map(index => mappedDice[index].face).join("").toUpperCase()
   }
 }
