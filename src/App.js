@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { Switch, Route } from 'react-router'
 
-import Test from './components/pages/Test'
 import Board from './components/pages/Game'
 import Home from './components/pages/Home'
 import CreateGame from './components/pages/CreateGame'
@@ -71,7 +70,7 @@ function App() {
               <SignIn />
             </Route>
             <Route exact path="/">
-              <Test />
+              <Home />
             </Route>
           </Switch>
         </Wrapper>
