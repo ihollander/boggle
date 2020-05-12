@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { BoggleSolver } from '../../utils/words'
+import BoggleSolver from '../../utils/BoggleSolver'
 
 const PageContainer = styled.div`
   height: 100%;

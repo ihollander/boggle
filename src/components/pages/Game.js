@@ -16,7 +16,7 @@ import * as userSelectors from '../../store/user/selectors'
 import * as gameSelectors from '../../store/game/selectors'
 import * as gameActions from '../../store/game/actions'
 import { gameStates } from '../../constants'
-import { BoggleSolver } from '../../utils/words'
+import BoggleSolver from '../../utils/BoggleSolver'
 
 const BoardContainer = styled.section`
   height: calc(100vh - 4rem);

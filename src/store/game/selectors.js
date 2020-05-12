@@ -1,4 +1,4 @@
-import { BoggleSolver } from '../../utils/words'
+import BoggleSolver from '../../utils/BoggleSolver'
 
 export const getTimer = ({ game: { timer } }) => timer
 

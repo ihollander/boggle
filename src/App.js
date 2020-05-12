@@ -1,17 +1,19 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import Board from './components/pages/Game'
 import { Switch, Route } from 'react-router'
+
+import Test from './components/pages/Test'
+import Board from './components/pages/Game'
 import Home from './components/pages/Home'
 import CreateGame from './components/pages/CreateGame'
 import SignIn from './components/pages/SignIn'
-
-import * as userSelectors from './store/user/selectors'
-import * as userActions from './store/user/actions'
 import Join from './components/pages/Join'
 import NavBar from './components/layout/NavBar'
 import Scores from './components/pages/Scores'
+
+import * as userSelectors from './store/user/selectors'
+import * as userActions from './store/user/actions'
 
 const Main = styled.main`
   display: flex;
@@ -69,7 +71,7 @@ function App() {
               <SignIn />
             </Route>
             <Route exact path="/">
-              <Home />
+              <Test />
             </Route>
           </Switch>
         </Wrapper>

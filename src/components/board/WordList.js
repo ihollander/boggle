@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { BoggleSolver } from '../../utils/words'
+import BoggleSolver from '../../utils/BoggleSolver'
 
 const ListContainer = styled.ul`
   list-style: none;
