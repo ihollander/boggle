@@ -66,7 +66,6 @@ const Game = () => {
     name: username
   }, {
     received: action => {
-      console.log(action)
       if (action.type) {
         dispatch(action)
       }

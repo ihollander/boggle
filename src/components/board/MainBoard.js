@@ -41,7 +41,6 @@ const isValidSelection = (selected, index) => {
     }
   }
 
-  console.log(neighbors, selected, index)
   return neighbors.includes(index) && !selected.includes(index)
 }
 
@@ -64,8 +63,6 @@ const isValidSelection2 = (selectedLetters, selected, index) => {
 
   return neighbors.includes(index) && !selected.includes(index)
 }
-
-
 class Node {
   constructor(value, level, parent = null) {
     this.value = value
@@ -74,16 +71,7 @@ class Node {
     this.children = []
   }
 
-  hasParentValue(value) {
-    let next = this
-    while (next.parent !== null) {
-      if (next.value === value) return true
-      next = next.parent
-    }
-    return false
-  }
-
-  toArray() {
+  toPathArray() {
     let next = this
     let result = [next.value]
     while (next.parent !== null) {
@@ -97,24 +85,6 @@ class Node {
 class Tree {
   constructor(value) {
     this.root = new Node(value, 0)
-  }
-
-  add(parentValue, value, level) {
-    const node = new Node(value, level)
-    const parent = this.find(parentValue, level - 1)
-    parent.children.push(node)
-  }
-
-  find(value, level) {
-    let queue = [this.root]
-    while (queue.length) {
-      let node = queue.shift()
-      if (node.value === value && node.level === level) {
-        return node
-      }
-      queue.push(...node.children)
-    }
-    return null
   }
 
   nodesAtLevel(level) {
@@ -131,31 +101,37 @@ class Tree {
   }
 }
 
+// indicesArray is a 2d array of index positions for letters on the board
+// SEE -> [ [6], [0,1,2,5], [0,1,2,5] ]
 const findPath = indicesArray => {
-  if (!indicesArray.length) return;
-  if (indicesArray.length === 1) {
-    return [indicesArray[0][0]]
-  }
+  if (indicesArray.length === 0) return []
+  if (indicesArray.length === 1) return [indicesArray[0][0]]
 
   const roots = indicesArray[0]
-  const rest = indicesArray.slice(1)
+
+  // for each index in the first array, create a tree with the index as the root node
   for (let i = 0; i < roots.length; i++) {
     const tree = new Tree(roots[i])
 
-    for (let j = 0; j < rest.length; j++) {
-      const restIndices = rest[j]
-      const nodes = tree.nodesAtLevel(j)
+    // for each subsequent array of indices [[0,1,2,5], [0,1,2,5]]
+    // build the tree by comparing the index to nodes
+    for (let level = 1; level < indicesArray.length; level++) {
+      const indices = indicesArray[level] // [0,1,2,5]
+      const parentNodes = tree.nodesAtLevel(level - 1) // [6]
 
-      for (let k = 0; k < nodes.length; k++) {
-        for (let l = 0; l < restIndices.length; l++) {
-          const node = nodes[k]
-          const letterIndex = restIndices[l]
-          const selection = node.toArray()
-          if (!node.hasParentValue(letterIndex) && isValidSelection(selection, letterIndex)) {
-            const addedNode = new Node(letterIndex, j + 1, node)
-            node.children.push(addedNode)
-            if (j + 1 === rest.length) {
-              return addedNode.toArray()
+      // for each parent node, check if any index is a valid selection 
+      for (let k = 0; k < parentNodes.length; k++) {
+        for (let l = 0; l < indices.length; l++) {
+          const parentNode = parentNodes[k]
+          const letterIndex = indices[l]
+          const selection = parentNode.toPathArray()
+          if (isValidSelection(selection, letterIndex)) {
+            // if it's a valid selection, add it as a child node
+            const addedNode = new Node(letterIndex, level, parentNode)
+            parentNode.children.push(addedNode)
+            // if we get to the end of the indices array, we've got a valid path
+            if (level === indicesArray.length - 1) {
+              return addedNode.toPathArray()
             }
           }
         }
@@ -217,7 +193,6 @@ const MainBoard = ({ dice, currentSelected, gameState, validatingState, submitWo
         dice.filter(die => die.face === char).map(die => die.index)
       )
 
-      // TODO: cant't just check the current selection, need to check the 
       const valid = nextIndices.filter(index => isValidSelection2(selected, currentSelected, index))
       if (valid.length) {
         const updatedWord = typedWord + key.toUpperCase()
@@ -225,7 +200,6 @@ const MainBoard = ({ dice, currentSelected, gameState, validatingState, submitWo
           dice.filter(die => die.face === char).map(die => die.index)
         )
         const path = findPath(selected)
-        console.log(updatedWord, selected, path)
 
         dispatch(setSelected(path))
         setTypedWord(updatedWord)
@@ -239,7 +213,6 @@ const MainBoard = ({ dice, currentSelected, gameState, validatingState, submitWo
           dice.filter(die => die.face === char).map(die => die.index)
         )
         const path = findPath(selected)
-        console.log(updatedWord, selected, path)
 
         dispatch(setSelected(path))
       }
