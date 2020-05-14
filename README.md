@@ -9,3 +9,6 @@ A fun way to play the game of [Boggle](https://en.wikipedia.org/wiki/Boggle) alo
 ## Why
 
 There are plenty of Boggle players out there, but I couldn't find one that was easy to set up a simple game to play remotely with friends. Boggle also presents a few fun algorithm problems to solve such as finding all possible answers for a given board. Adding keyboard support and checking the board for valid paths based on any given combination of keypresses also presented a nice challenge.
+
+## Resources
+https://www.wordgamedictionary.com/dictionary/
