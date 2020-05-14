@@ -14,6 +14,10 @@ const BoardContainer = styled.div`
   overscroll-behavior-y: none;
   touch-action: none;
   position: relative;
+  
+  &:focus {
+    outline: none;
+  }
 `
 
 const Blurrer = styled.div`
@@ -45,7 +49,7 @@ const isValidSelection = (selected, index) => {
 }
 
 const isValidSelection2 = (selectedLetters, selected, index) => {
-  if (selected.length === 0) return true
+  if (selected.length === 0 || !selectedLetters[selectedLetters.length - 1]) return true
 
   const lastSelection = selectedLetters[selectedLetters.length - 1]
   let neighbors = []
@@ -187,17 +191,18 @@ const MainBoard = ({ dice, currentSelected, gameState, validatingState, submitWo
   const handleKeyDown = ({ key, keyCode }) => {
     // letters
     if (keyCode >= 65 && keyCode <= 90) {
-      const nextIndices = dice.filter(die => die.face === key.toUpperCase()).map(die => die.index)
+      const nextIndices = dice.filter(die => (key === "q" && die.face === "Qu") || die.face === key.toUpperCase()).map(die => die.index)
 
       const selected = typedWord.split("").map(char =>
-        dice.filter(die => die.face === char).map(die => die.index)
+        dice.filter(die => (char === "Q" && die.face === "Qu") || die.face === char).map(die => die.index)
       )
 
       const valid = nextIndices.filter(index => isValidSelection2(selected, currentSelected, index))
+
       if (valid.length) {
         const updatedWord = typedWord + key.toUpperCase()
         const selected = updatedWord.split("").map(char =>
-          dice.filter(die => die.face === char).map(die => die.index)
+          dice.filter(die => (char === "Q" && die.face === "Qu") || die.face === char).map(die => die.index)
         )
         const path = findPath(selected)
 
@@ -210,7 +215,7 @@ const MainBoard = ({ dice, currentSelected, gameState, validatingState, submitWo
         dispatch(setSelected([]))
       } else {
         const selected = updatedWord.split("").map(char =>
-          dice.filter(die => die.face === char).map(die => die.index)
+          dice.filter(die => (char === "Q" && die.face === "Qu") || die.face === char).map(die => die.index)
         )
         const path = findPath(selected)
 

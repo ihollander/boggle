@@ -29,7 +29,7 @@ const ListContainer = styled.ul`
   list-style: none;
   height: 60vh;
   border: 4px solid var(--foreground);
-  overflow-y: scroll;
+  overflow-y: auto;
   padding: 0.5rem;
 `
 

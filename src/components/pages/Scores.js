@@ -8,7 +8,7 @@ const ScoreList = styled.ul`
   height: 100%;
   width: 100%;
   border: 4px solid var(--foreground);
-  overflow-y: scroll;
+  overflow-y: auto;
   padding: 0.5rem;
 `
 
