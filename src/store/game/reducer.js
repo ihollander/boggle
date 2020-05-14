@@ -43,6 +43,7 @@ const reducerActions = {
     return {
       ...state,
       words: [],
+      selected: [],
       gameState: gameStates.STARTING,
     }
   },
