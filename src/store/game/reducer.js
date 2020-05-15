@@ -42,8 +42,6 @@ const reducerActions = {
   [types.STARTING](state) {
     return {
       ...state,
-      words: [],
-      selected: [],
       gameState: gameStates.STARTING,
     }
   },
@@ -51,6 +49,8 @@ const reducerActions = {
     return {
       ...state,
       gameState: gameStates.PLAYING,
+      words: [],
+      selected: [],
       timer: state.timer > 0 ? state.timer : 10, // testing
     }
   },

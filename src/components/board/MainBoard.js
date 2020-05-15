@@ -206,22 +206,27 @@ const MainBoard = ({ dice, currentSelected, gameState, validatingState, submitWo
         )
         const path = findPath(selected)
 
-        dispatch(setSelected(path))
-        setTypedWord(updatedWord)
+        if (path) {
+          dispatch(setSelected(path))
+          setTypedWord(updatedWord)
+        }
       }
     } else if (keyCode === 8) {
       const updatedWord = typedWord.slice(0, typedWord.length - 1)
       if (updatedWord.length === 0) {
         dispatch(setSelected([]))
+        setTypedWord("")
       } else {
         const selected = updatedWord.split("").map(char =>
           dice.filter(die => (char === "Q" && die.face === "Qu") || die.face === char).map(die => die.index)
         )
         const path = findPath(selected)
 
-        dispatch(setSelected(path))
+        if (path) {
+          dispatch(setSelected(path))
+          setTypedWord(updatedWord)
+        }
       }
-      setTypedWord(updatedWord)
     } else if (keyCode === 13) {
       setTypedWord("")
       // submit!
