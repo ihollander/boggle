@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { Switch, Route } from 'react-router'
+import ReactGA from 'react-ga'
 
 import NavBar from './components/layout/NavBar'
 import Loader from './components/shared/Loader'
@@ -40,6 +41,7 @@ function App() {
 
   // wake up heroku server
   useEffect(() => {
+    ReactGA.pageview(window.location.pathname)
     fetch(process.env.REACT_APP_HTTP_ROOT)
       .then(() => setReady(true))
   }, [])

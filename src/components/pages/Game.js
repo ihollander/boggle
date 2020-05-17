@@ -18,6 +18,7 @@ import * as gameActions from '../../store/game/actions'
 import { gameStates } from '../../constants'
 import BoggleSolver from '../../utils/BoggleSolver'
 import Loader from '../shared/Loader'
+import { getGame } from '../../api/games'
 
 const BoardContainer = styled.section`
   height: calc(100vh - 4rem);
@@ -65,12 +66,21 @@ const Game = () => {
     id: id,
     name: username
   }, {
+    disconnected: data => console.log("cable disconnected", data),
+    rejected: data => console.log("cable rejected", data),
     received: action => {
       if (action.type) {
         dispatch(action)
       }
     }
   })
+
+  // fetch game
+  useEffect(() => {
+    getGame(id).then(game => {
+      dispatch(gameActions.loadedGame(game))
+    })
+  }, [id, dispatch])
 
   // create solver & calculate solutions
   useEffect(() => {

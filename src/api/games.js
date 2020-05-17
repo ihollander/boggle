@@ -1,3 +1,5 @@
+import ReactGA from 'react-ga'
+
 const BASE_URL = process.env.REACT_APP_HTTP_ROOT
 
 const defaultHeaders = {
@@ -11,6 +13,11 @@ const fetchAndParse = async (url, options) => {
     if (response.ok) {
       return data
     } else {
+      console.error(data)
+      ReactGA.exception({
+        description: JSON.stringify(data),
+        fatal: true
+      });
       throw data
     }
   } else {
@@ -28,6 +35,10 @@ export const createGame = ({ username, gridSize = 4, timer = 120 }) => {
 
 export const getGames = () => {
   return fetchAndParse(BASE_URL + "/games")
+}
+
+export const getGame = name => {
+  return fetchAndParse(BASE_URL + `/games/${name}`)
 }
 
 export const startGame = id => {

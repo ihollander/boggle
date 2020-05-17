@@ -22,7 +22,7 @@ const reducerActions = {
       letters: action.payload.letters
     }
   },
-  [types.JOINED](state, action) {
+  [types.LOADED](state, action) {
     return {
       ...state,
       timer: action.payload.timer,
@@ -30,6 +30,12 @@ const reducerActions = {
       players: action.payload.players,
       gameState: gameStates.WAITING,
       letters: action.payload.dice.split("")
+    }
+  },
+  [types.JOINED](state, action) {
+    return {
+      ...state,
+      players: action.payload
     }
   },
   [types.LEFT](state, action) {

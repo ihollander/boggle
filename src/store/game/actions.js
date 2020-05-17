@@ -20,6 +20,8 @@ export const createGame = ({ gridSize, timer, id, status, players, letters }) =>
   payload: { gridSize, timer, id, status, players, letters }
 })
 
+export const loadedGame = game => ({ type: types.LOADED, payload: game })
+
 export const startGame = () => ({ type: types.START })
 
 export const startingGame = () => ({ type: types.STARTING })

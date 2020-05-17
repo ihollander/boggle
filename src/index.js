@@ -2,11 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router } from 'react-router-dom'
+import ReactGA from 'react-ga'
+
 import './index.css';
 import App from './App';
 import ActionCableProvider from './actioncable/Provider'
 import * as serviceWorker from './serviceWorker';
 import store from './store'
+
+ReactGA.initialize('UA-166916161-1')
 
 ReactDOM.render(
   <React.StrictMode>
