@@ -10,7 +10,7 @@ const PlayerHeader = styled.h1`
 const PlayerList = styled.ul`
   list-style: none;
   text-align: center;
-  margin-bottom: 8rem;
+  margin-bottom: 4rem;
 `
 
 const Player = styled.li`

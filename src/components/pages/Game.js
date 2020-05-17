@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
+import ReactGA from 'react-ga'
 
 import MainBoard from '../board/MainBoard'
 import WordList from '../board/WordList'
@@ -48,6 +49,7 @@ const isValidSelection = (selected, index) => {
 const Game = () => {
   const dispatch = useDispatch()
   const { id } = useParams()
+  const history = useHistory()
 
   const { dice, selected, selectedWord } = useSelector(gameSelectors.getBoard)
   const { words, score } = useSelector(gameSelectors.getWords)
@@ -60,6 +62,14 @@ const Game = () => {
   const [validatingState, setValidatingState] = useState(0)
 
   const solverRef = useRef(null)
+
+  if (!id) {
+    ReactGA.exception({
+      description: "Missing game id",
+      fatal: true
+    });
+    history.push("/")
+  }
 
   useActionCable({
     channel: "GamesChannel",
@@ -150,6 +160,7 @@ const Game = () => {
         score={score}
         showSolution={showSolution}
         setShowSolution={setShowSolution}
+        id={id}
       />
       <WordList
         showSolution={showSolution}

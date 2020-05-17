@@ -9,7 +9,7 @@ const ActionBarContainer = styled.div`
   margin: 0.5rem 0;
 `
 
-const ActionBar = ({ score, ended, showSolution, setShowSolution }) => {
+const ActionBar = ({ id, score, ended, showSolution, setShowSolution }) => {
   return (
     <ActionBarContainer>
       <h2>SCORE: {score}</h2>
@@ -18,7 +18,7 @@ const ActionBar = ({ score, ended, showSolution, setShowSolution }) => {
           ANSWERS
         </h2>
       )}
-      <Timer />
+      <Timer id={id} />
     </ActionBarContainer>
   )
 }

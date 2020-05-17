@@ -14,13 +14,12 @@ const formatTime = time => {
   return `${m}:${ss}`
 }
 
-const Timer = () => {
+const Timer = ({ id }) => {
 
   const dispatch = useDispatch()
 
   const timer = useSelector(gameSelectors.getTimer)
   const gameState = useSelector(gameSelectors.getGameState)
-  const id = useSelector(gameSelectors.getGameId)
   const username = useSelector(userSelectors.getUser)
   const { words } = useSelector(gameSelectors.getWords)
 
