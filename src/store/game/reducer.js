@@ -41,8 +41,7 @@ const reducerActions = {
   [types.LEFT](state, action) {
     return {
       ...state,
-      players: action.payload,
-      gameState: gameStates.UNKNOWN,
+      players: action.payload
     }
   },
   [types.STARTING](state) {
