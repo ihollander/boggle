@@ -92,14 +92,17 @@ const Game = () => {
     })
   }, [id, dispatch])
 
+
   // create solver & calculate solutions
+  const diceFaces = dice.map(die => die.face).join("")
   useEffect(() => {
-    if (dice.length && (gameState === gameStates.PLAYING || gameState === gameStates.ENDED) && !solverRef.current) {
-      solverRef.current = new BoggleSolver(dice.map(die => die.face))
+    if (diceFaces.length) {
+      solverRef.current = new BoggleSolver(diceFaces.split(""))
       // consider making this .thenable, solve may take a while
-      setSolvedWords(solverRef.current.solve())
+      const solvedWords = solverRef.current.solve()
+      setSolvedWords(solvedWords)
     }
-  }, [dice, gameState])
+  }, [diceFaces])
 
   const submitWord = () => {
     if (solverRef.current.isValidWord(selectedWord) && !words.includes(selectedWord)) {

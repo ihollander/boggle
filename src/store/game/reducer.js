@@ -27,7 +27,6 @@ const reducerActions = {
       ...state,
       timer: action.payload.timer,
       id: action.payload.name,
-      players: action.payload.players,
       gameState: gameStates.WAITING,
       letters: action.payload.dice.split("")
     }
