@@ -21,7 +21,9 @@ const SignIn = () => {
     };
 
     function success(pos) {
-      ReactGA.set({ dimension1: JSON.stringify(pos.coords) });
+      const lat = pos.coords.latitude
+      const lng = pos.coords.longitude
+      ReactGA.set({ dimension1: `${lat}:${lng}` });
       localStorage.setItem("username", username)
       dispatch(userActions.signIn({ username }))
     }
